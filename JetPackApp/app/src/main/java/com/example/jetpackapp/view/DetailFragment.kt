@@ -5,14 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 
 import com.example.jetpackapp.R
+import com.example.jetpackapp.model.DogBreed
+import com.example.jetpackapp.viewmodel.DetailViewModel
 import kotlinx.android.synthetic.main.fragment_detail.*
 
 class DetailFragment : Fragment() {
 
-    private var dogUuid = 0
+    private lateinit var viewmodel: DetailViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,15 +29,34 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewmodel = ViewModelProvider(this).get(DetailViewModel::class.java)
+
+        viewmodel.fetch()
+
         arguments?.let {
-            dogUuid = DetailFragmentArgs.fromBundle(it).dogUuid
+//            dogUuid = DetailFragmentArgs.fromBundle(it).dogUuid
 //            textView2.text = dogUuid.toString()
+
+
         }
 
 //        btnList.setOnClickListener(View.OnClickListener {
 //            val action = DetailFragmentDirections.actionListFragment()
 //            Navigation.findNavController(it).navigate(action)
 //        })
+
+        observeViewModel()
+    }
+
+    fun observeViewModel() {
+        viewmodel.dogBreed.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                dogDetailsName.text = it.dogBreed
+                dogDetailLifeSpan.text = it.lifeSpan
+                dogDetailsPurporse.text = it.bredFor
+                dogDetailsTemperament.text = it.temperament
+            }
+        })
     }
 
 }
