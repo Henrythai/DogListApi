@@ -7,6 +7,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackapp.R
 import com.example.jetpackapp.model.DogBreed
+import com.example.jetpackapp.util.loadImage
 import kotlinx.android.synthetic.main.item_dog.view.*
 
 class DogsListAdapter(val DogList: ArrayList<DogBreed>) :
@@ -36,6 +37,7 @@ class DogsListAdapter(val DogList: ArrayList<DogBreed>) :
         val item = DogList[position]
         holder.tvDogName.text = item.dogBreed
         holder.tvLifeSpan.text = item.lifeSpan
+        holder.imageDog.loadImage(item.imageUrl)
         holder.itemView.setOnClickListener(View.OnClickListener {
             Navigation.findNavController(it).navigate(ListFragmentDirections.actionDetailFragment())
         })

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 import com.example.jetpackapp.R
 import com.example.jetpackapp.viewmodel.ListViewModel
@@ -39,11 +40,21 @@ class ListFragment : Fragment() {
         viewmodel = ViewModelProvider(this).get(ListViewModel::class.java)
         viewmodel.refresh()
 
+        refreshLayout.setOnRefreshListener {
+            dogsList.visibility = View.GONE
+            listError.visibility = View.GONE
+            loadingView.visibility = View.VISIBLE
+            viewmodel.refresh()
+            refreshLayout.isRefreshing = false
+        }
+
         dogsList?.apply {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
             adapter = doglistadapter
         }
+
+
 
         observeViewModel()
 
@@ -52,6 +63,7 @@ class ListFragment : Fragment() {
     fun observeViewModel() {
         viewmodel.dogs.observe(viewLifecycleOwner, Observer {
             it?.let {
+                dogsList.visibility = View.VISIBLE
                 doglistadapter.updateDogList(it)
             }
         })
