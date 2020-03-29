@@ -6,16 +6,22 @@
         <variable
             name="dog"
             type="com.example.jetpackapp.model.DogBreed" />
+
+        <variable
+            name="listenter"
+            type="com.example.jetpackapp.view.DogClickListener" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{listenter::onDogClicked}">
 
         <TextView
             android:id="@+id/dogId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{String.valueOf(dog.uuid)}"
             android:visibility="gone" />
 
         <ImageView
@@ -23,6 +29,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="dogImage"
+            android:imageUrl="@{dog.imageUrl}"
             android:padding="8dp"
             android:src="@mipmap/ic_dog" />
 

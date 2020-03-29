@@ -2,6 +2,7 @@ package com.example.jetpackapp.util
 
 import android.content.Context
 import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -27,4 +28,9 @@ fun ImageView.loadImage(
         .setDefaultRequestOptions(options)
         .load(uri)
         .into(this)
+}
+
+@BindingAdapter ("android:imageUrl")
+fun loadImage(imageView: ImageView,url:String?){
+    imageView.loadImage(url)
 }

@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="dog"
+            type="com.example.jetpackapp.model.DogBreed" />
+    </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:imageUrl="@{dog.imageUrl}"
             android:minHeight="180dp"
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_dog" />
@@ -25,7 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/dogDetailsImage"
             android:layout_centerHorizontal="true"
-            android:layout_margin="8dp" />
+            android:layout_margin="8dp"
+            android:text="@{dog.dogBreed}" />
 
         <TextView
             android:id="@+id/dogDetailsPurporse"
@@ -34,7 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/dogDetailsName"
             android:layout_centerHorizontal="true"
-            android:layout_margin="8dp" />
+            android:layout_margin="8dp"
+            android:text="@{dog.bredFor}" />
 
         <TextView
             android:id="@+id/dogDetailsTemperament"
@@ -43,7 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/dogDetailsPurporse"
             android:layout_centerHorizontal="true"
-            android:layout_margin="8dp" />
+            android:layout_margin="8dp"
+            android:text="@{dog.temperament}" />
 
         <TextView
             android:id="@+id/dogDetailLifeSpan"
@@ -52,7 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/dogDetailsTemperament"
             android:layout_centerHorizontal="true"
-            android:layout_margin="8dp" />
+            android:layout_margin="8dp"
+            android:text="@{dog.lifeSpan}" />
 
 
     </RelativeLayout>

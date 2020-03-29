@@ -1,24 +1,20 @@
 package com.example.jetpackapp.view
 
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackapp.R
+import com.example.jetpackapp.databinding.ItemDogBinding
 import com.example.jetpackapp.model.DogBreed
-import com.example.jetpackapp.util.loadImage
 import kotlinx.android.synthetic.main.item_dog.view.*
 
 class DogsListAdapter(val DogList: ArrayList<DogBreed>) :
-    RecyclerView.Adapter<DogsListAdapter.DogViewHolder>() {
+    RecyclerView.Adapter<DogsListAdapter.DogViewHolder>(), DogClickListener {
 
-    class DogViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val tvId = v.dogId
-        val tvDogName = v.dogName
-        val tvLifeSpan = v.dogLifeSpan
-        val imageDog = v.dogImage
-    }
 
     fun updateDogList(newDogList: List<DogBreed>) {
         DogList.clear()
@@ -27,7 +23,9 @@ class DogsListAdapter(val DogList: ArrayList<DogBreed>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_dog, parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+        val v: ItemDogBinding =
+            DataBindingUtil.inflate<ItemDogBinding>(inflater, R.layout.item_dog, parent, false)
         return DogViewHolder(v)
     }
 
@@ -35,12 +33,28 @@ class DogsListAdapter(val DogList: ArrayList<DogBreed>) :
 
     override fun onBindViewHolder(holder: DogViewHolder, position: Int) {
         val item = DogList[position]
-        holder.tvDogName.text = item.dogBreed
-        holder.tvLifeSpan.text = item.lifeSpan
-        holder.imageDog.loadImage(item.imageUrl)
-        holder.itemView.setOnClickListener(View.OnClickListener {
-            Navigation.findNavController(it)
-                .navigate(ListFragmentDirections.actionDetailFragment(item.uuid))
-        })
+        holder.binding.dog = item
+        holder.binding.listenter = this
+//        holder.tvDogName.text = item.dogBreed
+//        holder.tvLifeSpan.text = item.lifeSpan
+//        holder.imageDog.loadImage(item.imageUrl)
+//        holder.itemView.setOnClickListener(View.OnClickListener {
+//
+//        })
     }
+
+    override fun onDogClicked(v: View) {
+        val uuid = v.dogId.text.toString().toInt()
+        Navigation.findNavController(v)
+            .navigate(ListFragmentDirections.actionDetailFragment(uuid))
+    }
+
+    class DogViewHolder(val binding: ItemDogBinding) : RecyclerView.ViewHolder(binding.root) {
+//        val tvId = v.dogId
+//        val tvDogName = v.dogName
+//        val tvLifeSpan = v.dogLifeSpan
+//        val imageDog = v.dogImage
+    }
+
+
 }

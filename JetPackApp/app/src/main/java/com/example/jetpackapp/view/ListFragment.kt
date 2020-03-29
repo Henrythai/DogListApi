@@ -32,10 +32,6 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        btnDetail.setOnClickListener(View.OnClickListener {
-//            val action = ListFragmentDirections.actionDetailFragment(5)
-//            Navigation.findNavController(it).navigate(action)
-//        })
 
         viewmodel = ViewModelProvider(this).get(ListViewModel::class.java)
         viewmodel.refresh()

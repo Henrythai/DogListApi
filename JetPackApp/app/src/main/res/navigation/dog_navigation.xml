@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.example.jetpackapp.view.ListFragment"
-        android:label="ListFragment" >
+        android:label="List Of Dogs" >
         <action
             android:id="@+id/actionDetailFragment"
             app:destination="@id/detailFragment"
@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.jetpackapp.view.DetailFragment"
-        android:label="DetailFragment" >
+        android:label="Dog Detail" >
         <action
             android:id="@+id/actionListFragment"
             app:destination="@id/listFragment"
