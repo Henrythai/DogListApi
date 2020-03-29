@@ -1,17 +1,24 @@
 package com.example.jetpackapp.viewmodel
 
+import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.jetpackapp.model.DogBreed
+import com.example.jetpackapp.model.DogDatabase
 import com.example.jetpackapp.model.DogsApiService
-import io.reactivex.Scheduler
+import com.example.jetpackapp.util.SharePreferencesHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 
-class ListViewModel : ViewModel() {
+class ListViewModel(application: Application) : BaseViewModel(application) {
+
+    private val TAG = "ListViewModel"
+    private val refreshTime = 5 * 60 * 1000 * 1000 * 1000L
+    private val prefHelp = SharePreferencesHelper(getApplication())
+
     private val dogsService = DogsApiService()
     private val disposable = CompositeDisposable()
 
@@ -20,18 +27,28 @@ class ListViewModel : ViewModel() {
     val loading = MutableLiveData<Boolean>()
 
     fun refresh() {
-//        val dog1 = DogBreed("1", "LuNa", "15 years", "Group", "bredFor", "null", "")
-//        val dog2 = DogBreed("2", "KingKok", "20 years", "Group", "bredFor", "null", "")
-//        val dog3 = DogBreed("3", "LongNen", "35 years", "Group", "bredFor", "null", "")
-//        val DogList = arrayListOf<DogBreed>(dog1, dog2, dog3)
-//
-//        dogs.value = DogList
-//        dogsLoadError.value = false
-//        loading.value = false
 
+        val updateTime = prefHelp.getUpdateTime()
+        if (updateTime != null && updateTime != 0L && updateTime + refreshTime > System.nanoTime()) {
+            fetchFromDB()
+        } else {
+            fetchFromRemote()
+        }
+    }
+
+    fun refreshBypassCache() {
         fetchFromRemote()
+    }
+
+    fun fetchFromDB() {
+        loading.value = true
+        launch {
+            Log.d(TAG, "less than 5 m, Retrive from DB")
+            dogRetrived(DogDatabase(getApplication()).dogDao().getAllDogs())
+        }
 
     }
+
 
     fun fetchFromRemote() {
         loading.value = true
@@ -41,9 +58,8 @@ class ListViewModel : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<DogBreed>>() {
                     override fun onSuccess(t: List<DogBreed>) {
-                        dogs.value = t
-                        dogsLoadError.value = false
-                        loading.value = false
+                        storeDogLocally(t)
+                        Log.d(TAG, "more than 5 m, Retrive from API")
                     }
 
                     override fun onError(e: Throwable) {
@@ -54,6 +70,28 @@ class ListViewModel : ViewModel() {
 
                 })
         )
+    }
+
+    private fun dogRetrived(dogList: List<DogBreed>) {
+        dogs.value = dogList
+        dogsLoadError.value = false
+        loading.value = false
+    }
+
+    private fun storeDogLocally(dogList: List<DogBreed>) {
+        launch {
+            val dogDao = DogDatabase(context = getApplication()).dogDao()
+            dogDao.deleteDogs()
+            val idList = dogDao.insertAll(*dogList.toTypedArray())
+            var index = 0
+            while (index < idList.size) {
+                dogList[index].uuid = idList[index].toInt()
+                index++
+            }
+
+            dogRetrived(dogList)
+            prefHelp.saveUpdateTime(System.nanoTime())
+        }
     }
 
     override fun onCleared() {

@@ -13,7 +13,7 @@ interface DogDao {
     @Query("Select * From DogBreed")
     suspend fun getAllDogs(): List<DogBreed>
 
-    @Query("Select * From DogBreed Where breed_id= :uuid")
+    @Query("Select * From DogBreed Where uuid= :uuid")
     suspend fun getDogById(uuid: Int): DogBreed
 
     @Query("Delete from DogBreed")

@@ -5,18 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 
 import com.example.jetpackapp.R
 import com.example.jetpackapp.model.DogBreed
+import com.example.jetpackapp.util.getProgressDrawable
+import com.example.jetpackapp.util.loadImage
 import com.example.jetpackapp.viewmodel.DetailViewModel
 import kotlinx.android.synthetic.main.fragment_detail.*
 
 class DetailFragment : Fragment() {
 
     private lateinit var viewmodel: DetailViewModel
+    private var dogUuid: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,33 +32,26 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewmodel = ViewModelProvider(this).get(DetailViewModel::class.java)
-
-        viewmodel.fetch()
-
         arguments?.let {
-//            dogUuid = DetailFragmentArgs.fromBundle(it).dogUuid
-//            textView2.text = dogUuid.toString()
-
-
+            dogUuid = DetailFragmentArgs.fromBundle(it).dogUuid
         }
-
-//        btnList.setOnClickListener(View.OnClickListener {
-//            val action = DetailFragmentDirections.actionListFragment()
-//            Navigation.findNavController(it).navigate(action)
-//        })
-
+        viewmodel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        viewmodel.fetch(dogUuid)
         observeViewModel()
     }
 
     fun observeViewModel() {
         viewmodel.dogBreed.observe(viewLifecycleOwner, Observer {
             it?.let {
+                dogDetailsImage.loadImage(it.imageUrl)
                 dogDetailsName.text = it.dogBreed
                 dogDetailLifeSpan.text = it.lifeSpan
                 dogDetailsPurporse.text = it.bredFor
                 dogDetailsTemperament.text = it.temperament
+
+//                context?.let { context ->
+//                    dogDetailsImage.loadImage(it.imageUrl, getProgressDrawable(context))
+//                }
             }
         })
     }

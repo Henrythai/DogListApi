@@ -1,15 +1,24 @@
 package com.example.jetpackapp.viewmodel
 
+import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.jetpackapp.model.DogBreed
+import com.example.jetpackapp.model.DogDatabase
+import kotlinx.coroutines.launch
+import java.util.*
 
-class DetailViewModel : ViewModel() {
+class DetailViewModel(application: Application) : BaseViewModel(application) {
 
     val dogBreed = MutableLiveData<DogBreed>()
 
-    fun fetch() {
-        val dog1 = DogBreed("1", "LuNa", "15 years", "Group", "bredFor", "null", "")
-        dogBreed.value = dog1
+    fun fetch(uuid: Int) {
+        launch {
+            val dao = DogDatabase(getApplication()).dogDao()
+            val dog = dao.getDogById(uuid)
+            dogBreed.value = dog
+        }
     }
+
 }

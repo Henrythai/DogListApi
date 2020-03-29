@@ -39,7 +39,8 @@ class DogsListAdapter(val DogList: ArrayList<DogBreed>) :
         holder.tvLifeSpan.text = item.lifeSpan
         holder.imageDog.loadImage(item.imageUrl)
         holder.itemView.setOnClickListener(View.OnClickListener {
-            Navigation.findNavController(it).navigate(ListFragmentDirections.actionDetailFragment())
+            Navigation.findNavController(it)
+                .navigate(ListFragmentDirections.actionDetailFragment(item.uuid))
         })
     }
 }

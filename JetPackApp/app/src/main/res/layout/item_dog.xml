@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+
+        <variable
+            name="dog"
+            type="com.example.jetpackapp.model.DogBreed" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -15,9 +22,9 @@
             android:id="@+id/dogImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@mipmap/ic_dog"
+            android:contentDescription="dogImage"
             android:padding="8dp"
-            android:contentDescription="dogImage" />
+            android:src="@mipmap/ic_dog" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -30,13 +37,15 @@
                 android:id="@+id/dogName"
                 style="@style/Title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@{dog.dogBreed}" />
 
             <TextView
                 android:id="@+id/dogLifeSpan"
                 style="@style/Text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@{dog.lifeSpan}" />
 
         </LinearLayout>
 
