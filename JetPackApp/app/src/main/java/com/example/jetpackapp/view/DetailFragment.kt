@@ -1,5 +1,7 @@
 package com.example.jetpackapp.view
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.icu.text.CaseMap
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,10 +13,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 
 import com.example.jetpackapp.R
 import com.example.jetpackapp.databinding.FragmentDetailBinding
 import com.example.jetpackapp.model.DogBreed
+import com.example.jetpackapp.model.DogPalette
 import com.example.jetpackapp.util.getProgressDrawable
 import com.example.jetpackapp.util.loadImage
 import com.example.jetpackapp.viewmodel.DetailViewModel
@@ -57,6 +64,7 @@ class DetailFragment : Fragment() {
         viewmodel.dogBreed.observe(viewLifecycleOwner, Observer {
             it?.let {
                 binding.dog = it
+                setUpBackgroundColor(it.imageUrl)
 //                dogDetailsImage.loadImage(it.imageUrl)
 ////                dogDetailsName.text = it.dogBreed
 ////                dogDetailLifeSpan.text = it.lifeSpan
@@ -69,6 +77,27 @@ class DetailFragment : Fragment() {
 //                }
             }
         })
+    }
+
+    private fun setUpBackgroundColor(uri: String?) {
+        Glide.with(this)
+            .asBitmap()
+            .load(uri)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onLoadCleared(placeholder: Drawable?) {
+                }
+
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Palette.from(resource)
+                        .generate { palette ->
+                            val intColor = palette?.vibrantSwatch?.rgb ?: 0
+                            val myPallte = DogPalette(intColor)
+                            binding.palette = myPallte
+
+                        }
+                }
+
+            })
     }
 
 }
