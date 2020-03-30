@@ -85,6 +85,7 @@ class DetailFragment : Fragment() {
             .load(uri)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onLoadCleared(placeholder: Drawable?) {
+                    
                 }
 
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
