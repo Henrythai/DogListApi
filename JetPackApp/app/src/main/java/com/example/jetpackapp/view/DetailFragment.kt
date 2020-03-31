@@ -4,10 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.icu.text.CaseMap
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -37,6 +35,8 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentDetailBinding>(
             inflater,
@@ -50,7 +50,6 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         arguments?.let {
             dogUuid = DetailFragmentArgs.fromBundle(it).dogUuid
@@ -85,7 +84,7 @@ class DetailFragment : Fragment() {
             .load(uri)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onLoadCleared(placeholder: Drawable?) {
-                    
+
                 }
 
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
@@ -101,4 +100,20 @@ class DetailFragment : Fragment() {
             })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_detail, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_send_sms -> {
+
+            }
+            R.id.action_share -> {
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

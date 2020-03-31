@@ -73,8 +73,7 @@ dependencies {
     implementation 'androidx.palette:palette:1.0.0'
 
     implementation "androidx.preference:preference:1.1.0"
-
-
+    implementation 'com.takisoft.preferencex:preferencex:1.1.0'
 
 
     testImplementation 'junit:junit:4.12'

@@ -2,10 +2,12 @@ package com.example.jetpackapp.viewmodel
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.jetpackapp.model.DogBreed
 import com.example.jetpackapp.model.DogDatabase
 import com.example.jetpackapp.model.DogsApiService
+import com.example.jetpackapp.util.NotificationHelper
 import com.example.jetpackapp.util.SharePreferencesHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,7 +18,7 @@ import kotlinx.coroutines.launch
 class ListViewModel(application: Application) : BaseViewModel(application) {
 
     private val TAG = "ListViewModel"
-    private val refreshTime = 5 * 60 * 1000 * 1000 * 1000L
+    private var refreshTime = 5 * 60 * 1000 * 1000 * 1000L
     private val prefHelp = SharePreferencesHelper(getApplication())
 
     private val dogsService = DogsApiService()
@@ -27,13 +29,23 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
     val loading = MutableLiveData<Boolean>()
 
     fun refresh() {
-
+        checkCacheDuration()
         val updateTime = prefHelp.getUpdateTime()
         if (updateTime != null && updateTime != 0L && updateTime + refreshTime > System.nanoTime()) {
             fetchFromDB()
         } else {
             fetchFromRemote()
         }
+    }
+
+    private fun checkCacheDuration() {
+        val cacheRef =
+            SharePreferencesHelper(getApplication()).getCacheDuration()?.toLongOrNull()
+        cacheRef?.let {
+            refreshTime = it.times(1000 * 1000 * 1000L)
+        }
+
+//        Toast.makeText(getApplication(), refreshTime.toString(), Toast.LENGTH_LONG).show()
     }
 
     fun refreshBypassCache() {
@@ -60,6 +72,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                     override fun onSuccess(t: List<DogBreed>) {
                         storeDogLocally(t)
                         Log.d(TAG, "more than 5 m, Retrive from API")
+                        NotificationHelper(getApplication()).create()
                     }
 
                     override fun onError(e: Throwable) {

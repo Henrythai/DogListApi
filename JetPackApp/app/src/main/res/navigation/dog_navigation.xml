@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/dog_navigation"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dog_navigation"
     app:startDestination="@id/listFragment">
 
     <fragment
         android:id="@+id/listFragment"
         android:name="com.example.jetpackapp.view.ListFragment"
-        android:label="List Of Dogs" >
+        android:label="List Of Dogs">
         <action
             android:id="@+id/actionDetailFragment"
             app:destination="@id/detailFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_listFragment_to_settingsFragment"
+            app:destination="@id/actionSetting" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.jetpackapp.view.DetailFragment"
-        android:label="Dog Detail" >
+        android:label="Dog Detail">
         <action
             android:id="@+id/actionListFragment"
             app:destination="@id/listFragment"
@@ -24,7 +28,11 @@
             app:exitAnim="@anim/fragment_close_exit" />
         <argument
             android:name="dogUuid"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/actionSetting"
+        android:name="com.example.jetpackapp.view.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

@@ -32,7 +32,8 @@ class SharePreferencesHelper {
         }
     }
 
-    fun getUpdateTime(): Long? {
-        return pref?.getLong(PREF_TIME, 0)
-    }
+    fun getUpdateTime(): Long? = pref?.getLong(PREF_TIME, 0)
+
+
+    fun getCacheDuration() = pref?.getString("pref_cache_duration", "")
 }
