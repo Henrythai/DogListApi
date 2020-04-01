@@ -1,15 +1,11 @@
-package com.example.jetpackapp.viewmodel
+package com.example.jetpackapp.ui.detail
 
 import android.app.Application
-import android.content.Intent
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.jetpackapp.model.DogBreed
-import com.example.jetpackapp.model.DogDatabase
+import com.example.jetpackapp.data.network.model.DogBreed
+import com.example.jetpackapp.data.db.DogDatabase
+import com.example.jetpackapp.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
-import java.util.*
 
 class DetailViewModel(application: Application) : BaseViewModel(application) {
 
@@ -17,7 +13,9 @@ class DetailViewModel(application: Application) : BaseViewModel(application) {
 
     fun fetch(uuid: Int) {
         launch {
-            val dao = DogDatabase(getApplication()).dogDao()
+            val dao = DogDatabase(
+                getApplication()
+            ).dogDao()
             val dog = dao.getDogById(uuid)
             dogBreed.value = dog
         }

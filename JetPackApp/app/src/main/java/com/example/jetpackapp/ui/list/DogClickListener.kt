@@ -1,4 +1,4 @@
-package com.example.jetpackapp.view.listeners
+package com.example.jetpackapp.ui.list
 
 import android.view.View
 

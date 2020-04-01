@@ -1,25 +1,23 @@
-package com.example.jetpackapp.view.fragments
+package com.example.jetpackapp.ui.list
 
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.jetpackapp.R
-import com.example.jetpackapp.view.adapters.DogsListAdapter
-import com.example.jetpackapp.view.ListFragmentDirections
-import com.example.jetpackapp.viewmodel.ListViewModel
+import com.example.jetpackapp.data.network.service.DogsApiService
+import com.example.jetpackapp.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_list.*
 
-class ListFragment : Fragment() {
-
-    private lateinit var viewmodel: ListViewModel
+class ListFragment : BaseFragment<ListViewModel>() {
     private val doglistadapter =
         DogsListAdapter(arrayListOf())
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,14 +32,14 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewmodel = ViewModelProvider(this).get(ListViewModel::class.java)
-        viewmodel.refresh()
+//        viewmodel = ViewModelProvider(this).get(ListViewModel::class.java)
+        viewModel?.refresh()
 
         refreshLayout.setOnRefreshListener {
             dogsList.visibility = View.GONE
             listError.visibility = View.GONE
             loadingView.visibility = View.VISIBLE
-            viewmodel.refreshBypassCache()
+            viewModel?.refreshBypassCache()
             refreshLayout.isRefreshing = false
         }
 
@@ -51,27 +49,30 @@ class ListFragment : Fragment() {
             adapter = doglistadapter
         }
 
-
-
         observeViewModel()
 
     }
 
+    override fun createViewModel(): ListViewModel {
+        val factory = ListViewModelFactory(activity?.application!!, DogsApiService())
+        return ViewModelProvider(this, factory).get(ListViewModel::class.java)
+    }
+
     fun observeViewModel() {
-        viewmodel.dogs.observe(viewLifecycleOwner, Observer {
+        viewModel?.dogs?.observe(viewLifecycleOwner, Observer {
             it?.let {
                 dogsList.visibility = View.VISIBLE
                 doglistadapter.updateDogList(it)
             }
         })
 
-        viewmodel.dogsLoadError.observe(viewLifecycleOwner, Observer {
+        viewModel?.dogsLoadError?.observe(viewLifecycleOwner, Observer {
             it?.let {
                 listError.visibility = if (it) View.VISIBLE else View.GONE
             }
         })
 
-        viewmodel.loading.observe(viewLifecycleOwner, Observer {
+        viewModel?.loading?.observe(viewLifecycleOwner, Observer {
             it?.let {
                 loadingView.visibility = if (it) View.VISIBLE else View.GONE
                 if (it) {
@@ -97,4 +98,6 @@ class ListFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+
 }

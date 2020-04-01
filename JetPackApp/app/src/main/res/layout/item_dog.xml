@@ -5,11 +5,11 @@
 
         <variable
             name="dog"
-            type="com.example.jetpackapp.model.DogBreed" />
+            type="com.example.jetpackapp.data.network.model.DogBreed" />
 
         <variable
             name="listenter"
-            type="com.example.jetpackapp.view.listeners.DogClickListener" />
+            type="com.example.jetpackapp.ui.list.DogClickListener" />
     </data>
 
     <LinearLayout

@@ -1,4 +1,4 @@
-package com.example.jetpackapp.view.adapters
+package com.example.jetpackapp.ui.list
 
 
 import android.view.LayoutInflater
@@ -9,9 +9,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackapp.R
 import com.example.jetpackapp.databinding.ItemDogBinding
-import com.example.jetpackapp.model.DogBreed
-import com.example.jetpackapp.view.listeners.DogClickListener
-import com.example.jetpackapp.view.ListFragmentDirections
+import com.example.jetpackapp.data.network.model.DogBreed
 import kotlinx.android.synthetic.main.item_dog.view.*
 
 class DogsListAdapter(val DogList: ArrayList<DogBreed>) :

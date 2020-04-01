@@ -1,4 +1,4 @@
-package com.example.jetpackapp.view.activities
+package com.example.jetpackapp.view.Activities
 
 
 import android.Manifest
@@ -14,7 +14,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.example.jetpackapp.R
 import com.example.jetpackapp.util.PERMISSION_SEND_SMS
-import com.example.jetpackapp.view.fragments.DetailFragment
+import com.example.jetpackapp.ui.detail.DetailFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

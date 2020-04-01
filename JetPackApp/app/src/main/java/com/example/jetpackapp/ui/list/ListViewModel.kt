@@ -1,14 +1,12 @@
-package com.example.jetpackapp.viewmodel
+package com.example.jetpackapp.ui.list
 
 import android.app.Application
-import android.app.Notification
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.Navigation
-import com.example.jetpackapp.model.DogBreed
-import com.example.jetpackapp.model.DogDatabase
-import com.example.jetpackapp.model.DogsApiService
+import com.example.jetpackapp.data.network.model.DogBreed
+import com.example.jetpackapp.data.db.DogDatabase
+import com.example.jetpackapp.data.network.service.DogsApiService
+import com.example.jetpackapp.ui.base.BaseViewModel
 import com.example.jetpackapp.util.NotificationHelper
 import com.example.jetpackapp.util.SharePreferencesHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,17 +15,20 @@ import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 
-class ListViewModel(application: Application) : BaseViewModel(application) {
+class ListViewModel(application: Application, dogsApiService: DogsApiService) :
+    BaseViewModel(application) {
 
     private var refreshTime = 5 * 60 * 1000 * 1000 * 1000L
     private val prefHelp = SharePreferencesHelper(getApplication())
 
-    private val dogsService = DogsApiService()
+    private var dogsService: DogsApiService = dogsApiService
+
     private val disposable = CompositeDisposable()
 
-    val dogs = MutableLiveData<List<DogBreed>>()
-    val dogsLoadError = MutableLiveData<Boolean>()
-    val loading = MutableLiveData<Boolean>()
+    var dogs = MutableLiveData<List<DogBreed>>()
+    var dogsLoadError = MutableLiveData<Boolean>()
+    var loading = MutableLiveData<Boolean>()
+
 
     fun refresh() {
         checkCacheDuration()
@@ -70,7 +71,11 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                 .subscribeWith(object : DisposableSingleObserver<List<DogBreed>>() {
                     override fun onSuccess(t: List<DogBreed>) {
                         storeDogLocally(t)
-                        Toast.makeText(getApplication(), "Get data from Rest API", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            getApplication(),
+                            "Get data from Rest API",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         NotificationHelper(getApplication()).create()
                     }
 
@@ -92,7 +97,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
 
     private fun storeDogLocally(dogList: List<DogBreed>) {
         launch {
-            val dogDao = DogDatabase(context = getApplication()).dogDao()
+            val dogDao = DogDatabase(getApplication()).dogDao()
             dogDao.deleteDogs()
             val idList = dogDao.insertAll(*dogList.toTypedArray())
             var index = 0

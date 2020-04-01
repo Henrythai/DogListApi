@@ -6,7 +6,7 @@
 
         <variable
             name="smsInfo"
-            type="com.example.jetpackapp.model.SmsInfo" />
+            type="com.example.jetpackapp.data.network.model.SmsInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

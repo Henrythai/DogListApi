@@ -1,4 +1,4 @@
-package com.example.jetpackapp.view.fragments
+package com.example.jetpackapp.ui.detail
 
 import android.app.PendingIntent
 import android.content.Intent
@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -20,26 +19,24 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.jetpackapp.R
 import com.example.jetpackapp.databinding.FragmentDetailBinding
 import com.example.jetpackapp.databinding.SendSmsDialogBinding
-import com.example.jetpackapp.model.DogBreed
-import com.example.jetpackapp.model.DogPalette
-import com.example.jetpackapp.model.SmsInfo
-import com.example.jetpackapp.view.DetailFragmentArgs
-import com.example.jetpackapp.view.activities.MainActivity
-import com.example.jetpackapp.viewmodel.DetailViewModel
+import com.example.jetpackapp.data.network.model.DogBreed
+import com.example.jetpackapp.data.network.model.DogPalette
+import com.example.jetpackapp.data.network.model.SmsInfo
+import com.example.jetpackapp.ui.base.BaseFragment
+import com.example.jetpackapp.view.Activities.MainActivity
 
-class DetailFragment : Fragment() {
+class DetailFragment : BaseFragment<DetailViewModel>() {
 
-    private lateinit var viewmodel: DetailViewModel
     private lateinit var binding: FragmentDetailBinding
     private var dogUuid: Int = 0
     private var sendSMSstarted = false
     private lateinit var currentDog: DogBreed
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate<FragmentDetailBinding>(
@@ -55,17 +52,19 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            dogUuid = DetailFragmentArgs.fromBundle(
-                it
-            ).dogUuid
+            dogUuid = DetailFragmentArgs.fromBundle(it).dogUuid
         }
-        viewmodel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        viewmodel.fetch(dogUuid)
+        viewModel?.fetch(dogUuid)
         observeViewModel()
     }
 
+    override fun createViewModel(): DetailViewModel {
+        val factory = DetailModelFactory(activity?.application!!)
+        return ViewModelProvider(this, factory).get(DetailViewModel::class.java)
+    }
+
     fun observeViewModel() {
-        viewmodel.dogBreed.observe(viewLifecycleOwner, Observer {
+        viewModel?.dogBreed?.observe(viewLifecycleOwner, Observer {
             it?.let {
                 currentDog = it
                 binding.dog = it
@@ -87,7 +86,10 @@ class DetailFragment : Fragment() {
                     Palette.from(resource)
                         .generate { palette ->
                             val intColor = palette?.vibrantSwatch?.rgb ?: 0
-                            val myPallte = DogPalette(intColor)
+                            val myPallte =
+                                DogPalette(
+                                    intColor
+                                )
                             binding.palette = myPallte
                         }
                 }
@@ -165,4 +167,6 @@ class DetailFragment : Fragment() {
         val sms = SmsManager.getDefault()
         sms.sendTextMessage(smsInfo.to, null, smsInfo.text, pendingIntent, null)
     }
+
+
 }

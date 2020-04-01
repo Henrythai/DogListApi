@@ -7,11 +7,11 @@
 
         <variable
             name="dog"
-            type="com.example.jetpackapp.model.DogBreed" />
+            type="com.example.jetpackapp.data.network.model.DogBreed" />
 
         <variable
             name="palette"
-            type="com.example.jetpackapp.model.DogPalette" />
+            type="com.example.jetpackapp.data.network.model.DogPalette" />
     </data>
 
     <RelativeLayout
@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:background="@{palette.color}"
         android:paddingTop="10dp"
-        tools:context=".view.fragments.DetailFragment">
+        tools:context=".ui.detail.DetailFragment">
 
         <ImageView
             android:id="@+id/dogDetailsImage"

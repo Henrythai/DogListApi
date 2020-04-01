@@ -1,9 +1,9 @@
-package com.example.jetpackapp.model
+package com.example.jetpackapp.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import java.util.*
+import com.example.jetpackapp.data.network.model.DogBreed
 
 @Dao
 interface DogDao {

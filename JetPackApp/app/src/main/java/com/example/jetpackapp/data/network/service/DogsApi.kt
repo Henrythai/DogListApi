@@ -1,5 +1,6 @@
-package com.example.jetpackapp.model
+package com.example.jetpackapp.data.network.service
 
+import com.example.jetpackapp.data.network.model.DogBreed
 import io.reactivex.Single
 import retrofit2.http.GET
 
