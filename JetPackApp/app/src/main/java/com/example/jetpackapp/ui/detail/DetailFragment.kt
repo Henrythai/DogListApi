@@ -23,7 +23,7 @@ import com.example.jetpackapp.data.network.model.DogBreed
 import com.example.jetpackapp.data.network.model.DogPalette
 import com.example.jetpackapp.data.network.model.SmsInfo
 import com.example.jetpackapp.ui.base.BaseFragment
-import com.example.jetpackapp.view.Activities.MainActivity
+import com.example.jetpackapp.ui.Activities.MainActivity
 
 class DetailFragment : BaseFragment<DetailViewModel>() {
 
@@ -86,10 +86,7 @@ class DetailFragment : BaseFragment<DetailViewModel>() {
                     Palette.from(resource)
                         .generate { palette ->
                             val intColor = palette?.vibrantSwatch?.rgb ?: 0
-                            val myPallte =
-                                DogPalette(
-                                    intColor
-                                )
+                            val myPallte = DogPalette(intColor)
                             binding.palette = myPallte
                         }
                 }
@@ -130,12 +127,7 @@ class DetailFragment : BaseFragment<DetailViewModel>() {
     fun onPermissionResult(isPermissionGranted: Boolean) {
         if (sendSMSstarted && isPermissionGranted) {
             context?.let {
-                val smsInfo =
-                    SmsInfo(
-                        "",
-                        "${currentDog.dogBreed} bred for ${currentDog.bredFor}",
-                        currentDog.imageUrl
-                    )
+                val smsInfo = SmsInfo("", "${currentDog.dogBreed} bred for ${currentDog.bredFor}", currentDog.imageUrl)
 
                 val dialogBinding = DataBindingUtil.inflate<SendSmsDialogBinding>(
                     LayoutInflater.from(it),

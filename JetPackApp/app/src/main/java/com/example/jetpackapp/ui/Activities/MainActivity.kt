@@ -1,4 +1,4 @@
-package com.example.jetpackapp.view.Activities
+package com.example.jetpackapp.ui.Activities
 
 
 import android.Manifest
