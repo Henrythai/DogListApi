@@ -8,6 +8,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.jetpackapp.R
 
+const val PERMISSION_SEND_SMS = 123
+
 fun getProgressDrawable(context: Context): CircularProgressDrawable {
     return CircularProgressDrawable(context).apply {
         strokeWidth = 10f
@@ -30,7 +32,7 @@ fun ImageView.loadImage(
         .into(this)
 }
 
-@BindingAdapter ("android:imageUrl")
-fun loadImage(imageView: ImageView,url:String?){
+@BindingAdapter("android:imageUrl")
+fun loadImage(imageView: ImageView, url: String?) {
     imageView.loadImage(url)
 }

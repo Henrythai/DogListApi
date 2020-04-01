@@ -1,12 +1,16 @@
 package com.example.jetpackapp.view
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.icu.text.CaseMap
 import android.os.Bundle
+import android.telephony.SmsManager
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,8 +22,10 @@ import com.bumptech.glide.request.transition.Transition
 
 import com.example.jetpackapp.R
 import com.example.jetpackapp.databinding.FragmentDetailBinding
+import com.example.jetpackapp.databinding.SendSmsDialogBinding
 import com.example.jetpackapp.model.DogBreed
 import com.example.jetpackapp.model.DogPalette
+import com.example.jetpackapp.model.SmsInfo
 import com.example.jetpackapp.util.getProgressDrawable
 import com.example.jetpackapp.util.loadImage
 import com.example.jetpackapp.viewmodel.DetailViewModel
@@ -30,6 +36,8 @@ class DetailFragment : Fragment() {
     private lateinit var viewmodel: DetailViewModel
     private lateinit var binding: FragmentDetailBinding
     private var dogUuid: Int = 0
+    private var sendSMSstarted = false
+    private lateinit var currentDog: DogBreed
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +52,6 @@ class DetailFragment : Fragment() {
             container,
             false
         )
-
         return binding.root
     }
 
@@ -62,18 +69,9 @@ class DetailFragment : Fragment() {
     fun observeViewModel() {
         viewmodel.dogBreed.observe(viewLifecycleOwner, Observer {
             it?.let {
+                currentDog = it
                 binding.dog = it
                 setUpBackgroundColor(it.imageUrl)
-//                dogDetailsImage.loadImage(it.imageUrl)
-////                dogDetailsName.text = it.dogBreed
-////                dogDetailLifeSpan.text = it.lifeSpan
-////                dogDetailsPurporse.text = it.bredFor
-////                dogDetailsTemperament.text = it.temperament
-
-
-//                context?.let { context ->
-//                    dogDetailsImage.loadImage(it.imageUrl, getProgressDrawable(context))
-//                }
             }
         })
     }
@@ -93,7 +91,6 @@ class DetailFragment : Fragment() {
                             val intColor = palette?.vibrantSwatch?.rgb ?: 0
                             val myPallte = DogPalette(intColor)
                             binding.palette = myPallte
-
                         }
                 }
 
@@ -108,12 +105,66 @@ class DetailFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_send_sms -> {
-
+                sendSMSstarted = true
+                (activity as MainActivity).checkSmsPermission()
             }
             R.id.action_share -> {
-
+                shareWithOtherApp()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun shareWithOtherApp() {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this dog breed")
+        intent.putExtra(
+            Intent.EXTRA_TEXT,
+            "${currentDog.dogBreed} bred for ${currentDog.bredFor}"
+        )
+        intent.putExtra(Intent.EXTRA_STREAM, currentDog.imageUrl)
+        startActivity(Intent.createChooser(intent, "Share it"))
+    }
+
+    fun onPermissionResult(isPermissionGranted: Boolean) {
+        if (sendSMSstarted && isPermissionGranted) {
+            context?.let {
+                val smsInfo =
+                    SmsInfo(
+                        "",
+                        "${currentDog.dogBreed} bred for ${currentDog.bredFor}",
+                        currentDog.imageUrl
+                    )
+
+                val dialogBinding = DataBindingUtil.inflate<SendSmsDialogBinding>(
+                    LayoutInflater.from(it),
+                    R.layout.send_sms_dialog,
+                    null,
+                    false
+                )
+
+                AlertDialog.Builder(it)
+                    .setView(dialogBinding.root)
+                    .setPositiveButton("Send SMS") { dialog, wich ->
+                        if (!dialogBinding.txtDestination.text.isNullOrEmpty()) {
+                            smsInfo.to = dialogBinding.txtDestination.text.toString()
+                            sendSMS(smsInfo)
+                        }
+                    }
+                    .setNegativeButton("Cancel") { dialog, which -> }
+                    .show()
+
+                dialogBinding.smsInfo = smsInfo
+            }
+        }
+
+    }
+
+    fun sendSMS(smsInfo: SmsInfo) {
+        val intent = Intent(context, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+        val sms = SmsManager.getDefault()
+        sms.sendTextMessage(smsInfo.to, null, smsInfo.text, pendingIntent, null)
     }
 }

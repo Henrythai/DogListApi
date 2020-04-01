@@ -1,9 +1,11 @@
 package com.example.jetpackapp.viewmodel
 
 import android.app.Application
+import android.app.Notification
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.Navigation
 import com.example.jetpackapp.model.DogBreed
 import com.example.jetpackapp.model.DogDatabase
 import com.example.jetpackapp.model.DogsApiService
