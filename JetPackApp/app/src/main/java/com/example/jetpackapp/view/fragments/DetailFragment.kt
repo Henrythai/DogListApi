@@ -1,20 +1,17 @@
-package com.example.jetpackapp.view
+package com.example.jetpackapp.view.fragments
 
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.icu.text.CaseMap
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -26,10 +23,9 @@ import com.example.jetpackapp.databinding.SendSmsDialogBinding
 import com.example.jetpackapp.model.DogBreed
 import com.example.jetpackapp.model.DogPalette
 import com.example.jetpackapp.model.SmsInfo
-import com.example.jetpackapp.util.getProgressDrawable
-import com.example.jetpackapp.util.loadImage
+import com.example.jetpackapp.view.DetailFragmentArgs
+import com.example.jetpackapp.view.activities.MainActivity
 import com.example.jetpackapp.viewmodel.DetailViewModel
-import kotlinx.android.synthetic.main.fragment_detail.*
 
 class DetailFragment : Fragment() {
 
@@ -59,7 +55,9 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            dogUuid = DetailFragmentArgs.fromBundle(it).dogUuid
+            dogUuid = DetailFragmentArgs.fromBundle(
+                it
+            ).dogUuid
         }
         viewmodel = ViewModelProvider(this).get(DetailViewModel::class.java)
         viewmodel.fetch(dogUuid)

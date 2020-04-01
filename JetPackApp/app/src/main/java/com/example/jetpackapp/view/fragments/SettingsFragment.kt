@@ -1,4 +1,4 @@
-package com.example.jetpackapp.view
+package com.example.jetpackapp.view.fragments
 
 import android.os.Bundle
 

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.example.jetpackapp.view.ListFragment"
+        android:name="com.example.jetpackapp.view.fragments.ListFragment"
         android:label="List Of Dogs">
         <action
             android:id="@+id/actionDetailFragment"
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.jetpackapp.view.DetailFragment"
+        android:name="com.example.jetpackapp.view.fragments.DetailFragment"
         android:label="Dog Detail">
         <action
             android:id="@+id/actionListFragment"
@@ -33,6 +33,6 @@
     </fragment>
     <fragment
         android:id="@+id/actionSetting"
-        android:name="com.example.jetpackapp.view.SettingsFragment"
+        android:name="com.example.jetpackapp.view.fragments.SettingsFragment"
         android:label="SettingsFragment" />
 </navigation>

@@ -9,7 +9,7 @@
 
         <variable
             name="listenter"
-            type="com.example.jetpackapp.view.DogClickListener" />
+            type="com.example.jetpackapp.view.listeners.DogClickListener" />
     </data>
 
     <LinearLayout

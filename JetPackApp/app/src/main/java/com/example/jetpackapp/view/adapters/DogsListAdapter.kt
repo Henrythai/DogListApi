@@ -1,4 +1,4 @@
-package com.example.jetpackapp.view
+package com.example.jetpackapp.view.adapters
 
 
 import android.view.LayoutInflater
@@ -10,10 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jetpackapp.R
 import com.example.jetpackapp.databinding.ItemDogBinding
 import com.example.jetpackapp.model.DogBreed
+import com.example.jetpackapp.view.listeners.DogClickListener
+import com.example.jetpackapp.view.ListFragmentDirections
 import kotlinx.android.synthetic.main.item_dog.view.*
 
 class DogsListAdapter(val DogList: ArrayList<DogBreed>) :
-    RecyclerView.Adapter<DogsListAdapter.DogViewHolder>(), DogClickListener {
+    RecyclerView.Adapter<DogsListAdapter.DogViewHolder>(),
+    DogClickListener {
 
 
     fun updateDogList(newDogList: List<DogBreed>) {
@@ -26,7 +29,9 @@ class DogsListAdapter(val DogList: ArrayList<DogBreed>) :
         val inflater = LayoutInflater.from(parent.context)
         val v: ItemDogBinding =
             DataBindingUtil.inflate<ItemDogBinding>(inflater, R.layout.item_dog, parent, false)
-        return DogViewHolder(v)
+        return DogViewHolder(
+            v
+        )
     }
 
     override fun getItemCount(): Int = DogList.size
@@ -35,26 +40,19 @@ class DogsListAdapter(val DogList: ArrayList<DogBreed>) :
         val item = DogList[position]
         holder.binding.dog = item
         holder.binding.listenter = this
-//        holder.tvDogName.text = item.dogBreed
-//        holder.tvLifeSpan.text = item.lifeSpan
-//        holder.imageDog.loadImage(item.imageUrl)
-//        holder.itemView.setOnClickListener(View.OnClickListener {
-//
-//        })
     }
 
     override fun onDogClicked(v: View) {
         val uuid = v.dogId.text.toString().toInt()
         Navigation.findNavController(v)
-            .navigate(ListFragmentDirections.actionDetailFragment(uuid))
+            .navigate(
+                ListFragmentDirections.actionDetailFragment(
+                    uuid
+                )
+            )
     }
 
-    class DogViewHolder(val binding: ItemDogBinding) : RecyclerView.ViewHolder(binding.root) {
-//        val tvId = v.dogId
-//        val tvDogName = v.dogName
-//        val tvLifeSpan = v.dogLifeSpan
-//        val imageDog = v.dogImage
-    }
+    class DogViewHolder(val binding: ItemDogBinding) : RecyclerView.ViewHolder(binding.root)
 
 
 }

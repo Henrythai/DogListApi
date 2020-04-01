@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 
 class ListViewModel(application: Application) : BaseViewModel(application) {
 
-    private val TAG = "ListViewModel"
     private var refreshTime = 5 * 60 * 1000 * 1000 * 1000L
     private val prefHelp = SharePreferencesHelper(getApplication())
 
@@ -46,8 +45,6 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
         cacheRef?.let {
             refreshTime = it.times(1000 * 1000 * 1000L)
         }
-
-//        Toast.makeText(getApplication(), refreshTime.toString(), Toast.LENGTH_LONG).show()
     }
 
     fun refreshBypassCache() {
@@ -57,7 +54,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
     fun fetchFromDB() {
         loading.value = true
         launch {
-            Log.d(TAG, "less than 5 m, Retrive from DB")
+            Toast.makeText(getApplication(), "Get data from DB", Toast.LENGTH_SHORT).show()
             dogRetrived(DogDatabase(getApplication()).dogDao().getAllDogs())
         }
 
@@ -73,7 +70,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                 .subscribeWith(object : DisposableSingleObserver<List<DogBreed>>() {
                     override fun onSuccess(t: List<DogBreed>) {
                         storeDogLocally(t)
-                        Log.d(TAG, "more than 5 m, Retrive from API")
+                        Toast.makeText(getApplication(), "Get data from Rest API", Toast.LENGTH_SHORT).show()
                         NotificationHelper(getApplication()).create()
                     }
 

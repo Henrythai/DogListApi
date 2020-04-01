@@ -1,6 +1,5 @@
-package com.example.jetpackapp.view
+package com.example.jetpackapp.view.fragments
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -8,16 +7,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 import com.example.jetpackapp.R
+import com.example.jetpackapp.view.adapters.DogsListAdapter
+import com.example.jetpackapp.view.ListFragmentDirections
 import com.example.jetpackapp.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.fragment_list.*
 
 class ListFragment : Fragment() {
 
     private lateinit var viewmodel: ListViewModel
-    private val doglistadapter = DogsListAdapter(arrayListOf())
+    private val doglistadapter =
+        DogsListAdapter(arrayListOf())
 
 
     override fun onCreateView(
