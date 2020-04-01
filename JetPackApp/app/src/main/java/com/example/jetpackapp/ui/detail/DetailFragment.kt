@@ -25,7 +25,7 @@ import com.example.jetpackapp.data.network.model.SmsInfo
 import com.example.jetpackapp.ui.base.BaseFragment
 import com.example.jetpackapp.ui.Activities.MainActivity
 
-class DetailFragment : BaseFragment<DetailViewModel>() {
+class DetailFragment : BaseFragment<DetailViewModel>(), DetailListeners {
 
     private lateinit var binding: FragmentDetailBinding
     private var dogUuid: Int = 0
@@ -39,7 +39,12 @@ class DetailFragment : BaseFragment<DetailViewModel>() {
     ): View? {
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate<FragmentDetailBinding>(inflater, R.layout.fragment_detail, container, false)
+        binding = DataBindingUtil.inflate<FragmentDetailBinding>(
+            inflater,
+            R.layout.fragment_detail,
+            container,
+            false
+        )
         return binding.root
     }
 
@@ -54,7 +59,7 @@ class DetailFragment : BaseFragment<DetailViewModel>() {
     }
 
     override fun createViewModel(): DetailViewModel {
-        val factory = DetailModelFactory(activity?.application!!)
+        val factory = DetailModelFactory(activity?.application!!, this)
         return ViewModelProvider(this, factory).get(DetailViewModel::class.java)
     }
 
@@ -101,28 +106,21 @@ class DetailFragment : BaseFragment<DetailViewModel>() {
                 (activity as MainActivity).checkSmsPermission()
             }
             R.id.action_share -> {
-                shareWithOtherApp()
+                viewModel?.shareWithOtherApp()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun shareWithOtherApp() {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this dog breed")
-        intent.putExtra(
-            Intent.EXTRA_TEXT,
-            "${currentDog.dogBreed} bred for ${currentDog.bredFor}"
-        )
-        intent.putExtra(Intent.EXTRA_STREAM, currentDog.imageUrl)
-        startActivity(Intent.createChooser(intent, "Share it"))
-    }
 
     fun onPermissionResult(isPermissionGranted: Boolean) {
         if (sendSMSstarted && isPermissionGranted) {
             context?.let {
-                val smsInfo = SmsInfo("", "${currentDog.dogBreed} bred for ${currentDog.bredFor}", currentDog.imageUrl)
+                val smsInfo = SmsInfo(
+                    "",
+                    "${currentDog.dogBreed} bred for ${currentDog.bredFor}",
+                    currentDog.imageUrl
+                )
 
                 val dialogBinding = DataBindingUtil.inflate<SendSmsDialogBinding>(
                     LayoutInflater.from(it),
@@ -155,5 +153,13 @@ class DetailFragment : BaseFragment<DetailViewModel>() {
         sms.sendTextMessage(smsInfo.to, null, smsInfo.text, pendingIntent, null)
     }
 
+    override fun startActivityCreateChooser(intent: Intent) {
+        startActivity(Intent.createChooser(intent, "Share it"))
+    }
 
+
+}
+
+interface DetailListeners {
+    fun startActivityCreateChooser(intent: Intent);
 }
