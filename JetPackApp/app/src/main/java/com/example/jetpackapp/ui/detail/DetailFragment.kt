@@ -39,12 +39,7 @@ class DetailFragment : BaseFragment<DetailViewModel>() {
     ): View? {
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate<FragmentDetailBinding>(
-            inflater,
-            R.layout.fragment_detail,
-            container,
-            false
-        )
+        binding = DataBindingUtil.inflate<FragmentDetailBinding>(inflater, R.layout.fragment_detail, container, false)
         return binding.root
     }
 

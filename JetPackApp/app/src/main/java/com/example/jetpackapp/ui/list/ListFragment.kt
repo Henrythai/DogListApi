@@ -19,11 +19,7 @@ class ListFragment : BaseFragment<ListViewModel>() {
     private val doglistadapter =
         DogsListAdapter(arrayListOf())
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false)
@@ -32,7 +28,6 @@ class ListFragment : BaseFragment<ListViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        viewmodel = ViewModelProvider(this).get(ListViewModel::class.java)
         viewModel?.refresh()
 
         refreshLayout.setOnRefreshListener {

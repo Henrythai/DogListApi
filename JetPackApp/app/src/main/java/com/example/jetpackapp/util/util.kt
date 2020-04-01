@@ -10,6 +10,7 @@ import com.example.jetpackapp.R
 
 const val PERMISSION_SEND_SMS = 123
 
+//Working with ImageView
 fun getProgressDrawable(context: Context): CircularProgressDrawable {
     return CircularProgressDrawable(context).apply {
         strokeWidth = 10f

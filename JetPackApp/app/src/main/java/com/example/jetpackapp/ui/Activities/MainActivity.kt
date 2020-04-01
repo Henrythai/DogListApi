@@ -35,16 +35,8 @@ class MainActivity : AppCompatActivity() {
 
     fun checkSmsPermission() {
         //is not granted
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.SEND_SMS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    android.Manifest.permission.SEND_SMS
-                )
-            ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
                 AlertDialog.Builder(this)
                     .setTitle("Send SMS Permission")
                     .setMessage("This app requires access to send an SMS")
@@ -71,11 +63,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (requestCode) {

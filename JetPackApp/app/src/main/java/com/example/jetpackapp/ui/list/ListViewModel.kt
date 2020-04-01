@@ -21,7 +21,7 @@ class ListViewModel(application: Application, dogsApiService: DogsApiService) :
     private var refreshTime = 5 * 60 * 1000 * 1000 * 1000L
     private val prefHelp = SharePreferencesHelper(getApplication())
 
-    private var dogsService: DogsApiService = dogsApiService
+    private val dogsService: DogsApiService = dogsApiService
 
     private val disposable = CompositeDisposable()
 
