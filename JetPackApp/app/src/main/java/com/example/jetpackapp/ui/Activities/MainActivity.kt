@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun requestSmsPermission() {
         ActivityCompat.requestPermissions(
             this,

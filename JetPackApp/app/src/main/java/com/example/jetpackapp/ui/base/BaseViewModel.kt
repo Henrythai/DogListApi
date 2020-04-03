@@ -19,3 +19,4 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
         job.cancel()
     }
 }
+//viewmodel scope

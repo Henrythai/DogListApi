@@ -123,10 +123,7 @@ class DetailFragment : BaseFragment<DetailViewModel>(), DetailListeners {
                 )
 
                 val dialogBinding = DataBindingUtil.inflate<SendSmsDialogBinding>(
-                    LayoutInflater.from(it),
-                    R.layout.send_sms_dialog,
-                    null,
-                    false
+                    LayoutInflater.from(it), R.layout.send_sms_dialog, null, false
                 )
 
                 AlertDialog.Builder(it)

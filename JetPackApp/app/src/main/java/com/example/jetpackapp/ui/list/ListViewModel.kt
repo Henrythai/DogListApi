@@ -15,14 +15,11 @@ import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 
-class ListViewModel(application: Application, dogsApiService: DogsApiService) :
-    BaseViewModel(application) {
+class ListViewModel(application: Application, dogsApiService: DogsApiService) : BaseViewModel(application) {
 
     private var refreshTime = 5 * 60 * 1000 * 1000 * 1000L
     private val prefHelp = SharePreferencesHelper(getApplication())
-
     private val dogsService: DogsApiService = dogsApiService
-
     private val disposable = CompositeDisposable()
 
     var dogs = MutableLiveData<List<DogBreed>>()
